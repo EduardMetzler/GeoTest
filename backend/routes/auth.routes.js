@@ -57,7 +57,9 @@ router.post(
         password: hashedPassword,
         firstName,
         lastName,
+        admin: false,
       });
+      // console.log(user, "USER");
       const token = jwt.sign({ userId: user.id }, config.get("jwtSecter"), {
         expiresIn: "1h",
       });
@@ -105,6 +107,7 @@ router.post(
       const token = jwt.sign({ userId: user.id }, config.get("jwtSecter"), {
         expiresIn: "1000d",
       });
+      // console.log("testtttttt");
 
       res.json({
         token,
@@ -119,9 +122,11 @@ router.get("/user/loading", auth, async (req, res) => {
   try {
     const user = await User.find({ _id: req.user.userId });
 
-    console.log(user);
-
-    res.json({ firstName: user[0].firstName, lastName: user[0].lastName });
+    res.json({
+      firstName: user[0].firstName,
+      lastName: user[0].lastName,
+      admin: user[0].admin,
+    });
   } catch (e) {
     res.status(500).json({ message: "Ein Feler ist aufgetreten" });
   }
