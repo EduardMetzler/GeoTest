@@ -11,6 +11,7 @@ class Navbar extends Component {
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
   }
+
   render() {
     return (
       <div>

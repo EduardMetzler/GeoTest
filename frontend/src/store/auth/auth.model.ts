@@ -5,4 +5,5 @@ export interface AuthStore {
   firstName: String;
   lastName: String;
   user: Object;
+  admin: boolean;
 }

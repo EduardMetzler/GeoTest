@@ -54,9 +54,13 @@ export const userLoading = (token: String) => ({
   payload: { token },
 });
 
-export const userLoaded = (firstName: String, lastName: String) => ({
+export const userLoaded = (
+  firstName: String,
+  lastName: String,
+  admin: boolean
+) => ({
   type: USER_LOADED,
-  payload: { firstName, lastName },
+  payload: { firstName, lastName, admin },
 });
 
 export const authError = () => ({

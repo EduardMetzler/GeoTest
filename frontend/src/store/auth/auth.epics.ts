@@ -34,7 +34,9 @@ const epicLogin = (action$: any) =>
         body: {
           // email: action.payload.email,
           // password: action.payload.password,
-          email: "eduard.metzler@mail.ru",
+          // email: "eduard.metzler@rambler.ru",
+          // password: "000000",
+          email: "admin@mail.de",
           password: "000000",
         },
       }).pipe(
@@ -111,7 +113,11 @@ const epicUserLoading = (action$: any) =>
           const responseData = response["response"];
 
           return [
-            userLoaded(responseData["firstName"], responseData["lastName"]),
+            userLoaded(
+              responseData["firstName"],
+              responseData["lastName"],
+              responseData["admin"]
+            ),
             clearErrors(),
           ];
         }),

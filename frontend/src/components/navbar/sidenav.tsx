@@ -45,7 +45,7 @@ export const SidenavComponent: React.FC<ConnectedState> = ({
         </li>
         <li>
           {isAuthenticated && firstName ? (
-            <Link to="myProfile"> Hallo {firstName} ! </Link>
+            <Link to="dashboard"> Hallo {firstName} ! </Link>
           ) : null}
         </li>
       </ul>

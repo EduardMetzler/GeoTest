@@ -21,6 +21,7 @@ const INITIAL_STATE = {
   isLoading: false,
   firstName: "",
   lastName: "",
+  admin: false,
 
   user: Object,
 };
@@ -45,6 +46,7 @@ export default (
         isLoading: false,
         firstName: userDaten.payload.firstName,
         lastName: userDaten.payload.lastName,
+        admin: userDaten.payload.admin,
       };
     case LOGIN_SUCCESS:
     case REGISRER_SUCCESS:

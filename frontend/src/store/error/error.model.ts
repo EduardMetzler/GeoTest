@@ -1,5 +1,5 @@
 export interface ErrorStore {
-  message: Object;
+  message: String;
   status: String;
   id: String;
 }

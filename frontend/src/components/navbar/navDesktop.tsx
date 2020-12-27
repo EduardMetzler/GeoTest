@@ -3,6 +3,7 @@ import { AppState } from "../../store/model";
 import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { userLoading, logoutSuccess } from "../../store/auth/auth.actions";
+import { clearErrors } from "../../store/error/error.actions";
 
 interface ConnectedState {
   isAuthenticated: boolean;
@@ -31,7 +32,18 @@ export const NavDesktopComponent: React.FC<ConnectedState> = ({
   return (
     <>
       <ul className="right hide-on-med-and-down">
-        <li>{!isAuthenticated ? <Link to="login">Anmelden </Link> : null}</li>
+        <li>
+          {!isAuthenticated ? (
+            <Link to="login">Anmelden </Link>
+          ) : (
+            <div style={{}}>
+              <Link onClick={() => dispatch(clearErrors())} to="/dashboard">
+                {" "}
+                Hallo {firstName} !{" "}
+              </Link>
+            </div>
+          )}
+        </li>
 
         <li>
           {isAuthenticated ? (
@@ -43,13 +55,16 @@ export const NavDesktopComponent: React.FC<ConnectedState> = ({
         <li>
           {!isAuthenticated ? <Link to="register">Registrieren</Link> : null}
         </li>
-        <li>
+        {/* <li>
           {isAuthenticated && firstName ? (
             <div style={{}}>
-              <Link to="myProfile"> Hallo {firstName} ! </Link>
+              <Link onClick={() => dispatch(clearErrors())} to="/dashboard">
+                {" "}
+                Hallo {firstName} !{" "}
+              </Link>
             </div>
           ) : null}
-        </li>
+        </li> */}
       </ul>
     </>
   );
