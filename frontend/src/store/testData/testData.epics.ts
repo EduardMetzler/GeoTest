@@ -22,6 +22,8 @@ import {
   oneTestDataDelete,
   oneTestDataDeleted,
   getMessage,
+  testDataPublicStatus,
+  TESTDATA_PUBLIC_STATUS,
 } from "./testData.actions";
 import { getErrors, clearErrors } from "../error/error.actions";
 export const BASE_URL = "http://localhost:5000";
@@ -273,6 +275,42 @@ const epicOneTestDataDelete = (action$: any) =>
     )
   );
 
+const epicTestDataPublicStatus = (action$: any) =>
+  action$.pipe(
+    ofType<ReturnType<typeof testDataPublicStatus>>(TESTDATA_PUBLIC_STATUS),
+    mergeMap(({ payload }) =>
+      ajax({
+        url: `${BASE_URL}/api/test-data/one/public-status/${payload.oneTestDataId}`,
+
+        method: "PUT",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": payload.token,
+          authorization: `Baerer ${localStorage.getItem("token")}`,
+        },
+      }).pipe(
+        mergeMap((response) => {
+          const responseData = response["response"];
+          console.log("epicTestDataPublicStatus", responseData);
+
+          return [
+            clearErrors(),
+
+            loadingStatus(true),
+
+            oneTestDataArrayLoading(responseData.oneTestDataId),
+          ];
+        }),
+        catchError((error) => {
+          const responseData = error["response"];
+
+          return [getErrors(responseData["message"])];
+        })
+      )
+    )
+  );
+
 export const testDataEpics = [
   epicNewTestDataCreate,
   epicTestDataArrayLoading,
@@ -280,4 +318,5 @@ export const testDataEpics = [
   epicoNeTestDataUpdate,
   epicOneQuestionDelete,
   epicOneTestDataDelete,
+  epicTestDataPublicStatus,
 ];

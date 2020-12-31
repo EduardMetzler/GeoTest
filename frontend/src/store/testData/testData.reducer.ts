@@ -23,7 +23,7 @@ import {
 } from "./testData.actions";
 const INITIAL_STATE = {
   testDataArray: [],
-  oneTestDataArray: { name: "", _id: "", texts: [] },
+  oneTestDataArray: { name: "", _id: "", texts: [], publicStatus: false },
   loading: false,
   message: "",
 };
@@ -46,7 +46,7 @@ export default (
       return {
         ...state,
         testDataArray: testDataListe.payload.testDataListe,
-        oneTestDataArray: { name: "", _id: "", texts: [] },
+        oneTestDataArray: { name: "", _id: "", texts: [], publicStatus: false },
         message: "",
 
         loading: false,

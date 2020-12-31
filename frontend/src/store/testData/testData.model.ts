@@ -9,6 +9,7 @@ export interface TestData {
   name: string;
   _id: string;
   texts: Question[];
+  publicStatus: boolean;
   // token: String | null;
   // isAuthenticated: boolean;
   // isLoading: boolean;

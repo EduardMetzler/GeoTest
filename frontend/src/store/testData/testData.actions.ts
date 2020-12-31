@@ -12,6 +12,7 @@ export const TEST_DATA_DELETE = "TEST_DATA_DELETE";
 export const TEST_DATA_DELETED = "TEST_DATA_DELETED";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 export const GET_MESSAGE = "GET_MESSAGE";
+export const TESTDATA_PUBLIC_STATUS = "TESTDATA_PUBLIC_STATUS";
 
 export const newTestDataCreate = (newTestDataName: string) => ({
   type: "NEW_TEST_DATA_CREATE",
@@ -72,4 +73,12 @@ export const clearMessage = () => ({
 export const getMessage = (message: string) => ({
   type: "GET_MESSAGE",
   payload: { message },
+});
+
+export const testDataPublicStatus = (
+  status: boolean,
+  oneTestDataId: string
+) => ({
+  type: "TESTDATA_PUBLIC_STATUS",
+  payload: { status, oneTestDataId },
 });

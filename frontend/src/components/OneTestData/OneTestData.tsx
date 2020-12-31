@@ -12,6 +12,7 @@ import {
   oneTestDataDelete,
   oneTestDataUpdate,
   questionDelete,
+  testDataPublicStatus,
 } from "../../store/testData/testData.actions";
 
 import { LoadingComponent } from "../loading";
@@ -50,6 +51,7 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
     name: "",
     _id: "",
     texts: [{ question: "", correctAnswer: "", _id: "" }],
+    publicStatus: false,
   });
 
   if (message === "TestData ist Gelöscht") {
@@ -147,10 +149,13 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
   };
 
   const checkResetButton = () => {
-    if (JSON.stringify(testData) !== JSON.stringify(oneTestDataArray)) {
-      return "waves-effect waves-light btn-small";
+    if (
+      JSON.stringify(testData) === JSON.stringify(oneTestDataArray) ||
+      loading
+    ) {
+      return "waves-effect waves-light btn-small disabled";
     }
-    return "waves-effect waves-light btn-small disabled";
+    return "waves-effect waves-light btn-small";
   };
 
   const resetToOld = () => {
@@ -193,6 +198,35 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
       return "waves-effect   darken-1 btn-small  disabled styleAddButton";
     }
 
+    return "waves-effect  darken-1 btn-small styleAddButton";
+  };
+
+  const publicStatusChange = (newStatus: boolean) => {
+    dispatch(loadingStatus(true));
+
+    dispatch(testDataPublicStatus(newStatus, oneTestDataId));
+
+    console.log("public", newStatus);
+  };
+
+  const publicStatusButtonCheck = () => {
+    const isEmpty = testData.texts.filter((e) => {
+      return e.correctAnswer === "" || e.question === "";
+    });
+    if (
+      JSON.stringify(testData) !== JSON.stringify(oneTestDataArray) ||
+      isEmpty.length > 0 ||
+      loading
+    ) {
+      return "waves-effect   darken-1 btn-small  disabled styleAddButton";
+    }
+    return "waves-effect  darken-1 btn-small styleAddButton";
+  };
+
+  const loadingIsTrue = () => {
+    if (loading) {
+      return "waves-effect   darken-1 btn-small  disabled styleAddButton";
+    }
     return "waves-effect  darken-1 btn-small styleAddButton";
   };
 
@@ -281,7 +315,7 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
 
                 <button
                   type="button"
-                  className="waves-effect waves-light btn-small styleAddButton"
+                  className={loadingIsTrue()}
                   onClick={addNewQuestion}
                 >
                   Hinzufügen
@@ -295,11 +329,30 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
                 </button>
                 <button
                   type="button"
-                  className="waves-effect waves-light btn-small styleAddButton"
+                  className={loadingIsTrue()}
                   onClick={testDataDelete}
                 >
                   Test löschen
                 </button>
+                <div>
+                  {oneTestDataArray.publicStatus ? (
+                    <button
+                      type="button"
+                      className={publicStatusButtonCheck()}
+                      onClick={() => publicStatusChange(false)}
+                    >
+                      Verbergen
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={publicStatusButtonCheck()}
+                      onClick={() => publicStatusChange(true)}
+                    >
+                      Veröffentlichen
+                    </button>
+                  )}
+                </div>
               </form>
             </>
           ) : (
