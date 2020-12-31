@@ -21,6 +21,7 @@ router.post("/cteate", auth, async (req, res) => {
     }
     const name = new TestData({
       name: testDataName,
+      publicStatus: false,
     });
 
     await name.save();
@@ -53,14 +54,14 @@ router.get("/loading", auth, async (req, res) => {
 });
 
 router.get(`/one/loading/:oneTestDataId`, auth, async (req, res) => {
-  console.log("one loading");
+  // console.log("one loading");
   try {
     const testData = await TestData.findOne({
       _id: req.params.oneTestDataId,
     });
 
     const textsArray = await Text.find({ owner: req.params.oneTestDataId });
-    console.log(textsArray);
+    // console.log(textsArray, "looooooading");
     const texts = textsArray
       // .filter(({ __v }) => __v === 0)
       .map(({ question, correctAnswer, _id }) => {
@@ -70,6 +71,7 @@ router.get(`/one/loading/:oneTestDataId`, auth, async (req, res) => {
     const oneTestData = {
       name: testData.name,
       _id: testData._id,
+      publicStatus: testData.publicStatus,
       texts,
     };
 
@@ -111,7 +113,7 @@ router.put(`/one/update/:oneTestDataId`, auth, async (req, res) => {
 
 router.delete(`/one-question-delete/:id`, auth, async (req, res) => {
   try {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     Text.findByIdAndRemove(req.params.id, function (err, post) {
       if (err) return next(err);
 
@@ -129,6 +131,32 @@ router.delete(`/one-test-data-delete/:id`, auth, async (req, res) => {
 
       res.status(201).json({ message: "TestData ist Gelöscht" });
     });
+  } catch (e) {
+    res.status(500).json({ message: "Ein Feler ist aufgetreten" });
+  }
+});
+
+router.put(`/one/public-status/:oneTestDataId`, auth, async (req, res) => {
+  try {
+    const { status, oneTestDataId } = req.body;
+    const textsArray = await TestData.findOne({ _id: oneTestDataId });
+
+    const statuschanges = {
+      name: textsArray.name,
+      publicStatus: status,
+    };
+
+    TestData.findByIdAndUpdate(
+      oneTestDataId,
+      statuschanges,
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+        }
+      }
+    );
+    res.status(201).json({ message: "Gespeichert", oneTestDataId });
   } catch (e) {
     res.status(500).json({ message: "Ein Feler ist aufgetreten" });
   }
