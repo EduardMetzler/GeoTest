@@ -13,6 +13,8 @@ export const TEST_DATA_DELETED = "TEST_DATA_DELETED";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 export const GET_MESSAGE = "GET_MESSAGE";
 export const TESTDATA_PUBLIC_STATUS = "TESTDATA_PUBLIC_STATUS";
+export const TEST_DATA_SELECT_ARRAY_LOADING = "TEST_DATA_SELECT_ARRAY_LOADING";
+export const TEST_DATA_SELECT_ARRAY_LOADED = "TEST_DATA_SELECT_ARRAY_LOADED";
 
 export const newTestDataCreate = (newTestDataName: string) => ({
   type: "NEW_TEST_DATA_CREATE",
@@ -81,4 +83,13 @@ export const testDataPublicStatus = (
 ) => ({
   type: "TESTDATA_PUBLIC_STATUS",
   payload: { status, oneTestDataId },
+});
+
+export const testDataSelectArrayLoading = () => ({
+  type: "TEST_DATA_SELECT_ARRAY_LOADING",
+  payload: {},
+});
+export const testDataSelectArrayLoaded = (testDataListe: TestData[]) => ({
+  type: "TEST_DATA_SELECT_ARRAY_LOADED",
+  payload: { testDataListe },
 });

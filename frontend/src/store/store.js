@@ -5,12 +5,14 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import { authEpics } from "./auth/auth.epics";
 import { testDataEpics } from "./testData/testData.epics";
+import { testEpics } from "./test/test.epics";
 
 import authReducer from "./auth/auth.reducer";
 import errorReducer from "./error/error.reducer";
 import testDataReducer from "./testData/testData.reducer";
+import testReducer from "./test/test.reducer";
 
-const epic = combineEpics(...authEpics, ...testDataEpics);
+const epic = combineEpics(...authEpics, ...testDataEpics, ...testEpics);
 
 const epicDependencies = {};
 const epicMiddleware = createEpicMiddleware({ dependencies: epicDependencies });
@@ -21,6 +23,7 @@ export const configureStore = () => {
       auth: authReducer,
       error: errorReducer,
       testData: testDataReducer,
+      test: testReducer,
     }),
     undefined,
     composeWithDevTools(compose(applyMiddleware(epicMiddleware)))

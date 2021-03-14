@@ -17,6 +17,8 @@ import {
   userLoading,
   authError,
   loginFail,
+  myNewTest,
+  MY_NEW_TEST,
 } from "./auth.actions";
 import { getErrors, clearErrors } from "../error/error.actions";
 export const BASE_URL = "http://localhost:5000";
@@ -32,12 +34,12 @@ const epicLogin = (action$: any) =>
           "Content-Type": "application/json",
         },
         body: {
-          // email: action.payload.email,
-          // password: action.payload.password,
-          // email: "eduard.metzler@rambler.ru",
+          email: action.payload.email,
+          password: action.payload.password,
+          // email: "user1@mail.ru",
           // password: "000000",
-          email: "admin@mail.de",
-          password: "000000",
+          // email: "admin@mail.de",
+          // password: "000000",
         },
       }).pipe(
         mergeMap((response) => {
@@ -116,7 +118,8 @@ const epicUserLoading = (action$: any) =>
             userLoaded(
               responseData["firstName"],
               responseData["lastName"],
-              responseData["admin"]
+              responseData["admin"],
+              responseData["myTestsListe"]
             ),
             clearErrors(),
           ];
@@ -129,4 +132,41 @@ const epicUserLoading = (action$: any) =>
       )
     )
   );
-export const authEpics = [epicRegister, epicLogin, epicUserLoading];
+
+const epicMyNewTestAdd = (action$: any) =>
+  action$.pipe(
+    ofType<ReturnType<typeof myNewTest>>(MY_NEW_TEST),
+    mergeMap(({ payload }) =>
+      ajax({
+        url: `${BASE_URL}/api/user/new-test`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": payload.token,
+          authorization: `Baerer ${localStorage.getItem("token")}`,
+        },
+        body: {
+          myTestId: payload.myTestId,
+          name: payload.name,
+        },
+      }).pipe(
+        mergeMap((response) => {
+          const responseData = response["response"];
+
+          const token = responseData["token"];
+
+          return [userLoading(token), clearErrors()];
+        }),
+        catchError((error) => {
+          const responseData = error["response"];
+          return [];
+        })
+      )
+    )
+  );
+export const authEpics = [
+  epicRegister,
+  epicLogin,
+  epicUserLoading,
+  epicMyNewTestAdd,
+];

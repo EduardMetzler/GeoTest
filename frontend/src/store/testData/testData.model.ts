@@ -3,6 +3,8 @@ export interface TestDataStore {
   oneTestDataArray: TestData;
   loading: boolean;
   message: string;
+  testDataNamenArray: TestData[];
+  testDataNamenArrayLoaded: boolean;
 }
 
 export interface TestData {
@@ -10,25 +12,10 @@ export interface TestData {
   _id: string;
   texts: Question[];
   publicStatus: boolean;
-  // token: String | null;
-  // isAuthenticated: boolean;
-  // isLoading: boolean;
-  // firstName: String;
-  // lastName: String;
-  // user: Object;
-  // admin: boolean;
 }
 
 export interface Question {
   question: string;
   correctAnswer: string;
   _id: string;
-  // owner: string;
-  // token: String | null;
-  // isAuthenticated: boolean;
-  // isLoading: boolean;
-  // firstName: String;
-  // lastName: String;
-  // user: Object;
-  // admin: boolean;
 }

@@ -4,6 +4,11 @@ export interface AuthStore {
   isLoading: boolean;
   firstName: String;
   lastName: String;
-  user: Object;
   admin: boolean;
+  myTestsListe: myTestsId[];
+}
+
+export interface myTestsId {
+  id: String;
+  _id: String;
 }

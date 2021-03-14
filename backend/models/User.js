@@ -6,6 +6,13 @@ const schema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   admin: { type: Boolean, required: true },
+  // myTestsListe: [{ type: Types.ObjectId, ref: "Test" }],
+  myTestsListe: [
+    {
+      id: { type: Types.ObjectId, ref: "Test" },
+      name: { type: String, required: true },
+    },
+  ],
 });
 
 module.exports = model("User", schema);

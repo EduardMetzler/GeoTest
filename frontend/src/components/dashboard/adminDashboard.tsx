@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { AppState } from "../../store/model";
-import { newTestDataCreate } from "../../store/testData/testData.actions";
+
 import { NewTestData } from "./newTestData";
 import { ListeTestData } from "./listeTestData";
 

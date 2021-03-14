@@ -31,6 +31,11 @@ export const SidenavComponent: React.FC<ConnectedState> = ({
   return (
     <>
       <ul id="slide-out" className="sidenav">
+        <li>
+          {" "}
+          <Link to="/home">Logo </Link>{" "}
+        </li>
+
         <li>{!isAuthenticated ? <Link to="login">Anmelden </Link> : null}</li>
 
         <li>

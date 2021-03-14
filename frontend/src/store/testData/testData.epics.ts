@@ -1,9 +1,9 @@
 import { ofType } from "redux-observable";
-import { ActionsObservable } from "redux-observable";
-import { mergeMap, map, catchError } from "rxjs/operators";
+
+import { mergeMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { ajax } from "rxjs/ajax";
-import { useHistory } from "react-router-dom";
+
 import {
   newTestDataCreate,
   NEW_TEST_DATA_CREATE,
@@ -24,6 +24,9 @@ import {
   getMessage,
   testDataPublicStatus,
   TESTDATA_PUBLIC_STATUS,
+  TEST_DATA_SELECT_ARRAY_LOADING,
+  testDataSelectArrayLoading,
+  testDataSelectArrayLoaded,
 } from "./testData.actions";
 import { getErrors, clearErrors } from "../error/error.actions";
 export const BASE_URL = "http://localhost:5000";
@@ -43,25 +46,12 @@ const epicNewTestDataCreate = (action$: any) =>
         },
       }).pipe(
         mergeMap((response) => {
-          //   const responseData = response["response"];
-          // testDataArrayLoading();
-
-          return [
-            // loginSuccess(responseData["token"]),
-            // loadingStatus(true),
-            testDataArrayLoading(),
-            clearErrors(),
-            // document.location.reload(true),
-
-            // userLoading(responseData["token"]),
-          ];
+          return [testDataArrayLoading(), clearErrors()];
         }),
         catchError((error) => {
           const responseData = error["response"];
-          // console.log(responseData);
 
           return [getErrors(responseData["message"]), loadingStatus(false)];
-          // return [getErrors("eeeeeeeeeeeeeeeee"), loadingStatus(false)];
         })
       )
     )
@@ -83,14 +73,10 @@ const epicTestDataArrayLoading = (action$: any) =>
       }).pipe(
         mergeMap((response) => {
           const responseData = response["response"];
-          // console.log(responseData);
 
           return [
             clearErrors(),
             testDataArrayLoaded(responseData["testDataListe"]),
-            // loadingStatus(false),
-
-            // userLoading(responseData["token"]),
           ];
         }),
         catchError((error) => {
@@ -111,10 +97,9 @@ const epicOneTestDataArrayLoading = (action$: any) =>
     mergeMap(({ payload }) =>
       ajax({
         url: `${BASE_URL}/api/test-data/one/loading/${payload.oneTestDataId}`,
-        // url: `${BASE_URL}/api/test-data/one/loading/5f5f8a89f524a90124cffa7f`,
 
         method: "GET",
-        // body: payload,
+
         headers: {
           "Content-Type": "application/json",
           "auth-token": payload.token,
@@ -123,25 +108,16 @@ const epicOneTestDataArrayLoading = (action$: any) =>
       }).pipe(
         mergeMap((response) => {
           const responseData = response["response"];
-          console.log("oneTestDataArrayLoading");
-          console.log(response.response);
 
           return [
             clearErrors(),
-            // getErrors("eeeeeeeeeeeeeeeeeeeeeeeeeeeeee"),
             oneTestDataArrayLoaded(responseData.oneTestData),
-
             loadingStatus(false),
             getMessage("loaded"),
-
-            // userLoading(responseData["token"]),
           ];
         }),
         catchError((error) => {
           const responseData = error["response"];
-          console.log(responseData);
-          // const history = useHistory();
-          // history.push("/");
 
           return [getErrors(responseData["message"])];
         })
@@ -169,18 +145,13 @@ const epicoNeTestDataUpdate = (action$: any) =>
           console.log("epicoNeTestDataUpdate", responseData);
 
           return [
-            // console.log(payload.oneTestData._id),
-            // oneTestDataArrayLoaded(responseData.oneTestData),
             clearErrors(),
-            // loadingStatus(false),
             loadingStatus(true),
-
             oneTestDataArrayLoading(responseData.oneTestDataId),
           ];
         }),
         catchError((error) => {
           const responseData = error["response"];
-          // console.log(responseData);
 
           return [getErrors(responseData["message"])];
         })
@@ -208,13 +179,8 @@ const epicOneQuestionDelete = (action$: any) =>
           console.log(responseData);
 
           return [
-            // console.log(payload.oneTestDataId),
-
             oneTestDataArrayLoading(payload.oneTestDataId),
             clearErrors(),
-            // loadingStatus(false),
-
-            // userLoading(responseData["token"]),
           ];
         }),
         catchError((error) => {
@@ -244,26 +210,8 @@ const epicOneTestDataDelete = (action$: any) =>
       }).pipe(
         mergeMap((response) => {
           const responseData = response["response"];
-          console.log(responseData.message);
-          // const history = useHistory();
-          // if (responseData.message === "TestData ist Gelöscht") {
-          //   console.log("ddddddddddddddd");
-          // clearErrors();
-          // window.location.reload(true);
-          // const history = useHistory();
-          //  history.push("/");
-          // }
 
-          return [
-            // console.log(payload.oneTestDataId),
-
-            // oneTestDataArrayLoading(payload.oneTestDataId),
-            clearErrors(),
-            oneTestDataDeleted(responseData.message),
-            // loadingStatus(false),
-
-            // userLoading(responseData["token"]),
-          ];
+          return [clearErrors(), oneTestDataDeleted(responseData.message)];
         }),
         catchError((error) => {
           const responseData = error["response"];
@@ -292,7 +240,6 @@ const epicTestDataPublicStatus = (action$: any) =>
       }).pipe(
         mergeMap((response) => {
           const responseData = response["response"];
-          console.log("epicTestDataPublicStatus", responseData);
 
           return [
             clearErrors(),
@@ -311,6 +258,40 @@ const epicTestDataPublicStatus = (action$: any) =>
     )
   );
 
+const epicTestDataSelectArrayLoading = (action$: any) =>
+  action$.pipe(
+    ofType<ReturnType<typeof testDataSelectArrayLoading>>(
+      TEST_DATA_SELECT_ARRAY_LOADING
+    ),
+    mergeMap(({ payload }) =>
+      ajax({
+        url: `${BASE_URL}/api/test-data//select/loading`,
+        method: "GET",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": payload.token,
+          authorization: `Baerer ${localStorage.getItem("token")}`,
+        },
+      }).pipe(
+        mergeMap((response) => {
+          const responseData = response["response"];
+
+          return [
+            clearErrors(),
+            testDataSelectArrayLoaded(responseData["testDataListe"]),
+          ];
+        }),
+        catchError((error) => {
+          const responseData = error["response"];
+          console.log(responseData);
+
+          return [getErrors(responseData["message"]), loadingStatus(false)];
+        })
+      )
+    )
+  );
+
 export const testDataEpics = [
   epicNewTestDataCreate,
   epicTestDataArrayLoading,
@@ -319,4 +300,5 @@ export const testDataEpics = [
   epicOneQuestionDelete,
   epicOneTestDataDelete,
   epicTestDataPublicStatus,
+  epicTestDataSelectArrayLoading,
 ];

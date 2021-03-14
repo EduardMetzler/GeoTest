@@ -1,33 +1,37 @@
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
+
 import { Link } from "react-router-dom";
 import { AppState } from "../../store/model";
-import { login } from "../../store/auth/auth.actions";
+import { login, logoutSuccess } from "../../store/auth/auth.actions";
 
 import "./login.css";
+import ".././style.css";
 
 interface OwnProps {}
 
 interface ConnectedState {
   isAuthenticated: boolean;
   isLoading: boolean;
+  error: String;
 }
 
 const mapStateToProps = (state: AppState) => ({
-  //   state: state,
   isAuthenticated: state.auth.isAuthenticated,
   isLoading: state.auth.isLoading,
+  error: state.error.message,
 });
 
 const LoginComponent: React.FunctionComponent<ConnectedState & OwnProps> = ({
   isLoading,
+  error,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const dispatch = useDispatch();
 
   const handleSubmit = (event: any) => {
-    console.log(email, password);
     dispatch(login(email, password));
     event.preventDefault();
   };
@@ -67,6 +71,11 @@ const LoginComponent: React.FunctionComponent<ConnectedState & OwnProps> = ({
               </Link>
             </form>
           </div>
+        </div>
+        <div>
+          {error === "Falsche E-Mail oder Passwort" ? (
+            <h5 className="warningPen">{error}</h5>
+          ) : null}
         </div>
       </div>
     </div>

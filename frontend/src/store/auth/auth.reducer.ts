@@ -22,8 +22,9 @@ const INITIAL_STATE = {
   firstName: "",
   lastName: "",
   admin: false,
+  myTestsListe: [],
 
-  user: Object,
+  // user: Object,
 };
 
 export default (
@@ -38,7 +39,6 @@ export default (
 
     case USER_LOADED:
       const userDaten = action as ReturnType<typeof userLoaded>;
-      console.log(userDaten.payload);
 
       return {
         ...state,
@@ -47,6 +47,7 @@ export default (
         firstName: userDaten.payload.firstName,
         lastName: userDaten.payload.lastName,
         admin: userDaten.payload.admin,
+        myTestsListe: userDaten.payload.myTestsListe,
       };
     case LOGIN_SUCCESS:
     case REGISRER_SUCCESS:
@@ -72,6 +73,8 @@ export default (
         lastName: "",
         isAuthenticated: false,
         isLoading: false,
+        admin: false,
+        myTestsListe: [],
       };
 
     default:

@@ -4,6 +4,7 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
+
 const auth = require("../middleware/auth.middleware");
 
 const router = Router();
@@ -58,10 +59,11 @@ router.post(
         firstName,
         lastName,
         admin: false,
+        myTestsListe: [],
       });
-      // console.log(user, "USER");
+
       const token = jwt.sign({ userId: user.id }, config.get("jwtSecter"), {
-        expiresIn: "1h",
+        // expiresIn: "1h",
       });
 
       await user.save();
@@ -89,7 +91,7 @@ router.post(
         });
       }
       const { email, password } = req.body;
-      console.log(req.body);
+
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -105,9 +107,9 @@ router.post(
           .json({ message: "Falsche E-Mail oder Passwort" });
       }
       const token = jwt.sign({ userId: user.id }, config.get("jwtSecter"), {
-        expiresIn: "1000d",
+        // expiresIn: "1000d",
+        // expiresIn: "10s",
       });
-      // console.log("testtttttt");
 
       res.json({
         token,
@@ -126,7 +128,42 @@ router.get("/user/loading", auth, async (req, res) => {
       firstName: user[0].firstName,
       lastName: user[0].lastName,
       admin: user[0].admin,
+      myTestsListe: user[0].myTestsListe,
     });
+  } catch (e) {
+    res.status(500).json({ message: "Ein Feler ist aufgetreten" });
+  }
+});
+
+router.put("/user/new-test", auth, async (req, res) => {
+  try {
+    const { myTestId, name } = req.body;
+
+    const user = await User.find({ _id: req.user.userId });
+
+    var newMyTestsListet = user[0].myTestsListe;
+
+    newMyTestsListet.push({ id: myTestId, name });
+
+    const newUser = {
+      firstName: user[0].firstName,
+      lastName: user[0].lastName,
+      email: user[0].email,
+      password: user[0].password,
+      admin: user[0].admin,
+      myTestsListe: newMyTestsListet,
+    };
+
+    User.findByIdAndUpdate(req.user.userId, newUser, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+      }
+    });
+
+    // const token = req.headers.authorization.split(" ")[1];
+
+    res.json({ token: req.headers.authorization.split(" ")[1] });
   } catch (e) {
     res.status(500).json({ message: "Ein Feler ist aufgetreten" });
   }

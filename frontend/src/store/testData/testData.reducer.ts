@@ -15,17 +15,20 @@ import {
   ONE_TEST_DATA_UPDATE,
   oneTestDataDeleted,
   TEST_DATA_DELETED,
-  oneTestDataDelete,
   CLEAR_MESSAGE,
   GET_MESSAGE,
   getMessage,
   clearMessage,
+  TEST_DATA_SELECT_ARRAY_LOADED,
+  testDataSelectArrayLoaded,
 } from "./testData.actions";
 const INITIAL_STATE = {
   testDataArray: [],
   oneTestDataArray: { name: "", _id: "", texts: [], publicStatus: false },
   loading: false,
   message: "",
+  testDataNamenArray: [],
+  testDataNamenArrayLoaded: false,
 };
 
 export default (
@@ -34,8 +37,6 @@ export default (
 ): TestDataStore => {
   switch (action.type) {
     case NEW_TEST_DATA_CREATE:
-      // const testDataListe = action as ReturnType<typeof testDataArrayLoading>;
-
       return {
         ...state,
       };
@@ -53,32 +54,27 @@ export default (
       };
     case ONE_TEST_DATA_ARRAY_LOADED:
       const oneTestData = action as ReturnType<typeof oneTestDataArrayLoaded>;
-      console.log("ONE_TEST_DATA_ARRAY_LOADED");
 
       return {
         ...state,
         oneTestDataArray: oneTestData.payload,
-        // oneTestDataArray:oneTestData.payload.oneTestData.name,
+
         testDataArray: [],
         loading: false,
-        // message: "loaded",
       };
 
     case LOADING_STATUS:
       const status = action as ReturnType<typeof loadingStatus>;
-      // console.log(oneTestData);
 
       return {
         ...state,
         loading: status.payload.status,
-        // loading: false,
       };
     default:
       return state;
 
     case TEST_DATA_DELETED:
       const message = action as ReturnType<typeof oneTestDataDeleted>;
-      // console.log(datau);
 
       return {
         ...state,
@@ -97,11 +93,25 @@ export default (
 
     case GET_MESSAGE:
       const data = action as ReturnType<typeof getMessage>;
-      // console.log(data);
 
       return {
         ...state,
         message: data.payload.message,
+      };
+
+    case TEST_DATA_SELECT_ARRAY_LOADED:
+      const testDataListeForUser = action as ReturnType<
+        typeof testDataSelectArrayLoaded
+      >;
+
+      return {
+        ...state,
+
+        testDataNamenArray: testDataListeForUser.payload.testDataListe,
+        oneTestDataArray: { name: "", _id: "", texts: [], publicStatus: false },
+        message: "",
+        testDataNamenArrayLoaded: true,
+        loading: false,
       };
   }
 };

@@ -15,7 +15,7 @@ export default (
   switch (action.type) {
     case GET_ERRORS:
       const error = action as ReturnType<typeof getErrors>;
-      // console.log(error);
+
       return {
         message: error.payload.message,
         status: "",
@@ -23,8 +23,6 @@ export default (
       };
 
     case CLEAR_ERRORS:
-      // console.log("error clear");
-
       return {
         message: "",
         status: "",

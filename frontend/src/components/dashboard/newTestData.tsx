@@ -41,8 +41,6 @@ const NewTestDataCreateComponent: React.FC<ConnectedState> = ({
   };
   return (
     <>
-      {/* <div className="row">
-        <div className="col m10 offset-m1 l8 offset-l2 xl6 offset-xl3"> */}
       <div className="card">
         <div className="card-content">
           <form onSubmit={handleSubmit}>
@@ -63,8 +61,7 @@ const NewTestDataCreateComponent: React.FC<ConnectedState> = ({
           </form>
         </div>
       </div>
-      {/* </div>
-      </div> */}
+
       <div className="row">
         <div className="col m10 offset-m1 l8 offset-l2 xl6 offset-xl3">
           <div className="error">

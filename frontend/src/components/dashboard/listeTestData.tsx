@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { connect, useDispatch } from "react-redux";
 import { AppState } from "../../store/model";
 import { testDataArrayLoading } from "../../store/testData/testData.actions";
-import { NewTestData } from "./newTestData";
 
 import "./dashboard.css";
 import { TestData } from "../../store/testData/testData.model";
@@ -24,46 +23,50 @@ export const ListeTestDataComponent: React.FC<ConnectedState> = ({
   if (testDataArray.length === 0) {
     dispatch(testDataArrayLoading());
   }
-  // const [newTestDataName, setNewTestDataName] = useState("");
 
-  // const dispatch = useDispatch();
-
-  // const handleSubmit = (event: any) => {
-  //   dispatch(newTestDataCreate(newTestDataName));
-  //   event.preventDefault();
-  // };
-
-  // const checkData = () => {
-  //   if (newTestDataName.length === 0) {
-  //     return "btn waves-effect waves-light disabled";
-  //   }
-  //   return "btn waves-effect waves-light ";
-  // };
   return (
-    <div className="card">
-      <div className="card-content">
-        <table className="highlight">
-          <tbody>
-            {testDataArray.map((testData) => (
-              <tr key={testData._id}>
-                <td>
-                  <Link to={`/one-test-data/${testData._id}`}>
-                    <h5>{testData.name}</h5>
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {/* <ul className="highlight">
-          {testDataArray.map((testData) => (
-            <li key={testData.name}>
-              <h5>{testData.name}</h5>
-            </li>
-          ))}
-        </ul> */}
+    <>
+      <div className="card">
+        <div className="card-content">
+          <h5>Veröffentlicht</h5>
+          <table className="highlight">
+            <tbody>
+              {testDataArray.map((testData) => (
+                <tr key={testData._id}>
+                  {testData.publicStatus && (
+                    <td>
+                      <Link to={`/one-test-data/${testData._id}`}>
+                        <h5>{testData.name}</h5>
+                      </Link>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+      <div className="card">
+        <div className="card-content">
+          <h5>Nicht veröffentlicht</h5>
+          <table className="highlight">
+            <tbody>
+              {testDataArray.map((testData) => (
+                <tr key={testData._id}>
+                  {!testData.publicStatus && (
+                    <td>
+                      <Link to={`/one-test-data/${testData._id}`}>
+                        <h5>{testData.name}</h5>
+                      </Link>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -1,21 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
+
 import { AppState } from "../../store/model";
+import { AllMyTests } from "./allMyTests";
 
-interface ConnectedState {
-  //   isAuthenticated: boolean;
-  //   firstName: String;
-  //   token?: String | null;
-}
+interface ConnectedState {}
 
-const mapStateToProps = (state: AppState) => ({
-  //   isAuthenticated: state.auth.isAuthenticated,
-  //   firstName: state.auth.firstName,
-  //   token: state.auth.token,
-});
+const mapStateToProps = (state: AppState) => ({});
 
 export const userDashboardComponent: React.FC<ConnectedState> = ({}) => {
-  return <div>user</div>;
+  return <AllMyTests />;
 };
 
 export const UserDashboard = connect(mapStateToProps)(userDashboardComponent);

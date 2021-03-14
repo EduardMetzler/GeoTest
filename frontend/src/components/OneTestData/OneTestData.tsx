@@ -25,6 +25,7 @@ interface ConnectedState {
   loading: boolean;
   message: string;
   error: String;
+  admin?: boolean;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -32,6 +33,7 @@ const mapStateToProps = (state: AppState) => ({
   loading: state.testData.loading,
   message: state.testData.message,
   error: state.error.message,
+  admin: state.auth.admin,
 });
 
 export const OneTestDataComponent: React.FC<ConnectedState> = ({
@@ -39,6 +41,7 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
   loading,
   message,
   error,
+  admin,
 }) => {
   // const { oneTestDataId } = useParams<ConnectedState>();
   const { oneTestDataId }: any = useParams();
@@ -166,13 +169,13 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
   const checkData = () => {
     var map1: any = [];
 
-    testData.texts.filter((item, index) => {
+    testData.texts.filter((item) => {
       map1.push(item.question);
     });
 
     var map2: any = [];
 
-    testData.texts.filter((item, index) => {
+    testData.texts.filter((item) => {
       map2.push(item.correctAnswer);
     });
 
@@ -205,8 +208,6 @@ export const OneTestDataComponent: React.FC<ConnectedState> = ({
     dispatch(loadingStatus(true));
 
     dispatch(testDataPublicStatus(newStatus, oneTestDataId));
-
-    console.log("public", newStatus);
   };
 
   const publicStatusButtonCheck = () => {

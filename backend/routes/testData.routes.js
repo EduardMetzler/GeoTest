@@ -1,13 +1,9 @@
 const { Router } = require("express");
-const bcrypt = require("bcryptjs");
-const config = require("config");
-const jwt = require("jsonwebtoken");
-const { check, validationResult } = require("express-validator");
+
 const TestData = require("../models/TestData");
 const Text = require("../models/Text");
 
 const auth = require("../middleware/auth.middleware");
-const { async } = require("rxjs/internal/scheduler/async");
 
 const router = Router();
 
@@ -54,14 +50,13 @@ router.get("/loading", auth, async (req, res) => {
 });
 
 router.get(`/one/loading/:oneTestDataId`, auth, async (req, res) => {
-  // console.log("one loading");
   try {
     const testData = await TestData.findOne({
       _id: req.params.oneTestDataId,
     });
 
     const textsArray = await Text.find({ owner: req.params.oneTestDataId });
-    // console.log(textsArray, "looooooading");
+
     const texts = textsArray
       // .filter(({ __v }) => __v === 0)
       .map(({ question, correctAnswer, _id }) => {
@@ -113,7 +108,6 @@ router.put(`/one/update/:oneTestDataId`, auth, async (req, res) => {
 
 router.delete(`/one-question-delete/:id`, auth, async (req, res) => {
   try {
-    // console.log(req.params.id);
     Text.findByIdAndRemove(req.params.id, function (err, post) {
       if (err) return next(err);
 
@@ -159,6 +153,16 @@ router.put(`/one/public-status/:oneTestDataId`, auth, async (req, res) => {
     res.status(201).json({ message: "Gespeichert", oneTestDataId });
   } catch (e) {
     res.status(500).json({ message: "Ein Feler ist aufgetreten" });
+  }
+});
+
+router.get("/select/loading", auth, async (req, res) => {
+  try {
+    const testDataListe = await TestData.find({ publicStatus: true });
+
+    res.status(201).json({ testDataListe });
+  } catch (e) {
+    res.status(500).json({ message: "error 404" });
   }
 });
 

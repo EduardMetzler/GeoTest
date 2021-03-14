@@ -1,4 +1,4 @@
-import React, { useEffect, Component } from "react";
+import React from "react";
 import { AppState } from "../../store/model";
 import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -31,7 +31,10 @@ export const NavDesktopComponent: React.FC<ConnectedState> = ({
 
   return (
     <>
-      <ul className="right hide-on-med-and-down">
+      <Link className="brand-logo left hide-on-med-and-down" to="/">
+        GeoTest{" "}
+      </Link>{" "}
+      <ul className="right hide-on-med-and-down ">
         <li>
           {!isAuthenticated ? (
             <Link to="login">Anmelden </Link>
@@ -44,7 +47,6 @@ export const NavDesktopComponent: React.FC<ConnectedState> = ({
             </div>
           )}
         </li>
-
         <li>
           {isAuthenticated ? (
             <Link onClick={() => dispatch(logoutSuccess())} to="/">
@@ -55,16 +57,6 @@ export const NavDesktopComponent: React.FC<ConnectedState> = ({
         <li>
           {!isAuthenticated ? <Link to="register">Registrieren</Link> : null}
         </li>
-        {/* <li>
-          {isAuthenticated && firstName ? (
-            <div style={{}}>
-              <Link onClick={() => dispatch(clearErrors())} to="/dashboard">
-                {" "}
-                Hallo {firstName} !{" "}
-              </Link>
-            </div>
-          ) : null}
-        </li> */}
       </ul>
     </>
   );

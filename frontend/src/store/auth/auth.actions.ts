@@ -1,3 +1,5 @@
+import { myTestsId } from "./auth.model";
+
 export const USER_LOADED = "USER_LOADED";
 export const USER_LOADING = "USER_LOADING";
 export const AUTH_ERROR = "AUTH_ERROR";
@@ -9,6 +11,8 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 
 export const REGISTER = "REGISTER";
 export const LOGIN = "LOGIN";
+
+export const MY_NEW_TEST = "MY_NEW_TEST";
 
 export const register = (
   firstName: String,
@@ -57,13 +61,19 @@ export const userLoading = (token: String) => ({
 export const userLoaded = (
   firstName: String,
   lastName: String,
-  admin: boolean
+  admin: boolean,
+  myTestsListe: myTestsId[]
 ) => ({
   type: USER_LOADED,
-  payload: { firstName, lastName, admin },
+  payload: { firstName, lastName, admin, myTestsListe },
 });
 
 export const authError = () => ({
   type: AUTH_ERROR,
   payload: {},
+});
+
+export const myNewTest = (myTestId: String, name: String) => ({
+  type: MY_NEW_TEST,
+  payload: { myTestId, name },
 });
